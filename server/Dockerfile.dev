@@ -11,7 +11,7 @@ ARG NODE_VERSION=22.0.0
 FROM node:${NODE_VERSION}-alpine
 
 # Use production node environment by default.
-ENV NODE_ENV production
+ENV NODE_ENV development
 
 
 WORKDIR /code
@@ -35,4 +35,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application.
-CMD npx ts-node src/index.ts
+CMD npx nodemon src/index.ts
