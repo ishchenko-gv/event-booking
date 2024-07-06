@@ -5,6 +5,7 @@
 exports.up = function (knex) {
   return knex.schema.createTable("users", (table) => {
     table.bigIncrements();
+    table.timestamps();
     table.string("email", 300);
     table.text("password");
   });
