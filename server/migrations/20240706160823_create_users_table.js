@@ -3,11 +3,11 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.createTable("users", (table) => {
+  return knex.schema.createTable('users', (table) => {
     table.bigIncrements();
     table.timestamps();
-    table.string("email", 300);
-    table.text("password");
+    table.string('email', 300);
+    table.text('password');
   });
 };
 
@@ -16,5 +16,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable("users");
+  return knex.schema.dropTable('users');
 };

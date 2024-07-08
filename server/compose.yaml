@@ -17,7 +17,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - .:/code
+      - .:/usr/src/app
     depends_on:
       db:
         condition: service_healthy

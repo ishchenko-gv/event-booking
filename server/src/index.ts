@@ -1,10 +1,12 @@
-import express from "express";
-import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
+import express from 'express';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import passport from 'passport';
 
-import { connectDatabase } from "./db";
+import { connectDatabase } from './db';
 
-import { userRouter } from "./user/handlers";
+import { jwtStrategy } from './auth';
+import { authRouter } from './auth/handlers';
 
 connectDatabase();
 
@@ -15,12 +17,10 @@ app.use(bodyParser.json());
 
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
-  res.send("Hello there!!!");
-});
+passport.use('jwt', jwtStrategy);
 
-app.use("/users", userRouter);
+app.use('/auth', authRouter);
 
 app.listen(8000, () =>
-  console.info("Server is running on http://localhost:8000"),
+  console.info('Server is running on http://localhost:8000')
 );
