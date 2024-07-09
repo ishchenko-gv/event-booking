@@ -3,4 +3,6 @@ export class InvalidUserOrPasswordError extends Error {
     super(message);
     this.name = 'InvalidUserOrPasswordError';
   }
+
+  status = 400;
 }

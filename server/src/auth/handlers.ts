@@ -1,37 +1,35 @@
 import express from 'express';
 
 import * as userService from '../user/service';
-import { InvalidUserOrPasswordError } from '../user/exceptions';
 import { authRequired } from '.';
+import { userCredentialsSchema } from './schema';
 
 const authRouter = express.Router();
 
-authRouter.post('/signup', async (req, res) => {
+authRouter.post('/signup', async (req, res, next) => {
   try {
-    await userService.signup(req.body.email, req.body.password);
+    const userData = userCredentialsSchema.parse(req.body);
+    await userService.signup(userData.email, userData.password);
 
     res.status(201).send();
   } catch (err) {
-    res.status(500).send();
+    next(err);
   }
 });
 
-authRouter.post('/login', async (req, res) => {
+authRouter.post('/login', async (req, res, next) => {
   try {
-    const jwt = await userService.login(req.body.email, req.body.password);
+    const userData = userCredentialsSchema.parse(req.body);
+    const jwt = await userService.login(userData.email, userData.password);
 
     res.cookie('token', jwt, { httpOnly: true });
     res.send();
   } catch (err) {
-    if (err instanceof InvalidUserOrPasswordError) {
-      return res.status(400).send(err);
-    }
-
-    res.status(500).send();
+    next(err);
   }
 });
 
-authRouter.get('/me', authRequired, async (req, res) => {
+authRouter.get('/me', authRequired, (req, res) => {
   res.send(req.user);
 });
 
