@@ -7,7 +7,7 @@ import { connectDatabase } from './db';
 import { jwtStrategy } from './auth/strategies';
 import { authRouter } from './auth/handlers';
 import { organizationRouter } from './organization/handlers';
-import { venueRouter } from './venues/handlers';
+import { venueRouter } from './venue/handlers';
 
 async function start() {
   connectDatabase();
