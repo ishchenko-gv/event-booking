@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { userCredentialsSchema, userSchema } from '../auth/schema';
+import { userCredentialsSchema, userSchema } from '../auth/schemas';
 
 export type UserCredentials = z.infer<typeof userCredentialsSchema>;
 export type User = z.infer<typeof userSchema>;

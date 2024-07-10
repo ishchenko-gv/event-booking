@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import * as authService from './service';
 import { authRequired } from './middlewares';
-import { userCredentialsSchema } from './schema';
+import { userCredentialsSchema } from './schemas';
 
 const authRouter = Router();
 

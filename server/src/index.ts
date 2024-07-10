@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import passport from 'passport';
 
 import { connectDatabase } from './db';
-import { jwtStrategy } from './auth';
+import { jwtStrategy } from './auth/strategies';
 import { authRouter } from './auth/handlers';
 import { organizationRouter } from './organization/handlers';
 import { venueRouter } from './venues/handlers';
@@ -28,7 +28,7 @@ async function start() {
   app.listen(8000, () => {
     console.info(
       new Date(Date.now()).toLocaleString(),
-      'Server is running on http://localhost:8000'
+      '| Server is running on http://localhost:8000'
     );
   });
 }
