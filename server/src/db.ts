@@ -4,7 +4,7 @@ import { Case } from 'change-case-all';
 
 export let knex: Knex = null as unknown as Knex;
 
-export async function connectDatabase() {
+export function connectDatabase() {
   knex = _knex({
     client: 'pg',
     connection: process.env.DATABASE_URL,

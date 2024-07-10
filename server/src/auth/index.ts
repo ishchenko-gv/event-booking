@@ -20,6 +20,8 @@ export const jwtStrategy = new JwtStrategy(opts, async (jwt_payload, done) => {
   try {
     const user = await getUser(jwt_payload.id);
 
+    console.log('jwt', typeof jwt_payload.id);
+
     if (!user) return done(null, false);
 
     const userData = {

@@ -10,7 +10,7 @@ import { authRouter } from './auth/handlers';
 import { organizationRouter } from './organization/handlers';
 
 async function start() {
-  await connectDatabase();
+  connectDatabase();
 
   const app = express();
 
