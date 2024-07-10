@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-import * as userQueries from './queries';
+import * as userQueries from '../user/queries';
 import { InvalidUserOrPasswordError } from './exceptions';
 
 export async function signup(email: string, password: string) {

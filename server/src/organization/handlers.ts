@@ -1,7 +1,6 @@
 import { Router } from 'express';
 
-import { authRequired } from '../auth';
-import { checkOwner } from '../../middlewares';
+import { authRequired, checkOwner } from '../auth/middlewares';
 
 import { createOrganizationSchema } from './schemas';
 import * as organizationQueries from './queries';

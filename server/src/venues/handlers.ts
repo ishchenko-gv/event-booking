@@ -1,9 +1,8 @@
 import { Router } from 'express';
 
-import { authRequired } from '../auth';
+import { authRequired, checkOwner } from '../auth/middlewares';
 import { createVenueSchema } from './schemas';
 import * as venueQueries from './queries';
-import { checkOwner } from '../../middlewares';
 
 export const venueRouter = Router();
 

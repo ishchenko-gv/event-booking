@@ -1,15 +1,15 @@
-import express from 'express';
+import { Router } from 'express';
 
-import * as userService from '../user/service';
-import { authRequired } from '.';
+import * as authService from './service';
+import { authRequired } from './middlewares';
 import { userCredentialsSchema } from './schema';
 
-const authRouter = express.Router();
+const authRouter = Router();
 
 authRouter.post('/signup', async (req, res, next) => {
   try {
     const userData = userCredentialsSchema.parse(req.body);
-    await userService.signup(userData.email, userData.password);
+    await authService.signup(userData.email, userData.password);
 
     res.status(201).send();
   } catch (err) {
@@ -20,7 +20,7 @@ authRouter.post('/signup', async (req, res, next) => {
 authRouter.post('/login', async (req, res, next) => {
   try {
     const userData = userCredentialsSchema.parse(req.body);
-    const jwt = await userService.login(userData.email, userData.password);
+    const jwt = await authService.login(userData.email, userData.password);
 
     res.cookie('token', jwt, { httpOnly: true });
     res.send();

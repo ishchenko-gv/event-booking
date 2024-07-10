@@ -1,11 +1,11 @@
 import { Request } from 'express';
-import passport from 'passport';
+
 import {
   Strategy as JwtStrategy,
   StrategyOptionsWithoutRequest,
 } from 'passport-jwt';
 
-import { getUser } from '../user/queries';
+import * as userQueries from '../user/queries';
 
 function extractToken(req: Request) {
   return req.cookies['token'];
@@ -18,7 +18,7 @@ export const opts: StrategyOptionsWithoutRequest = {
 
 export const jwtStrategy = new JwtStrategy(opts, async (payload, done) => {
   try {
-    const user = await getUser(payload.id);
+    const user = await userQueries.getUser(payload.id);
 
     if (!user) return done(null, false);
 
@@ -32,5 +32,3 @@ export const jwtStrategy = new JwtStrategy(opts, async (payload, done) => {
     return done(err, false);
   }
 });
-
-export const authRequired = passport.authenticate('jwt', { session: false });
