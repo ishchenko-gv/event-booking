@@ -8,11 +8,17 @@ import * as organizationQueries from './queries';
 
 const organizationRouter = Router();
 
-organizationRouter.post('/', async (req, res, next) => {
+organizationRouter.post('/', authRequired, async (req, res, next) => {
   try {
     const organizationData = createOrganizationSchema.parse(req.body);
+
+    const ownedOrganization = {
+      ...organizationData,
+      ownerId: req.user!.id,
+    };
+
     const organization =
-      await organizationQueries.createOrganization(organizationData);
+      await organizationQueries.createOrganization(ownedOrganization);
 
     res.status(201).send(organization);
   } catch (err) {
@@ -20,13 +26,22 @@ organizationRouter.post('/', async (req, res, next) => {
   }
 });
 
-organizationRouter.get('/', authRequired, async (req, res, next) => {
+organizationRouter.get(
+  '/:id',
+  authRequired,
+  checkOwner(organizationQueries.getOrganization),
+  (_, res) => {
+    res.send(res.locals.object);
+  }
+);
+
+organizationRouter.get('/owned', authRequired, async (req, res, next) => {
   try {
     const organizations = await organizationQueries.getOrganizationsByUser(
       req.user!.id
     );
 
-    res.json(organizations);
+    res.send(organizations);
   } catch (err) {
     next(err);
   }

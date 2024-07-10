@@ -3,7 +3,6 @@ import { z } from 'zod';
 export const createOrganizationSchema = z
   .object({
     name: z.string().max(300),
-    ownerId: z.number(),
     contacts: z
       .object({
         phone: z.string().optional(),

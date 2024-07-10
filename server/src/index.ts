@@ -4,10 +4,10 @@ import cookieParser from 'cookie-parser';
 import passport from 'passport';
 
 import { connectDatabase } from './db';
-
 import { jwtStrategy } from './auth';
 import { authRouter } from './auth/handlers';
 import { organizationRouter } from './organization/handlers';
+import { venueRouter } from './venues/handlers';
 
 async function start() {
   connectDatabase();
@@ -23,10 +23,14 @@ async function start() {
 
   app.use('/auth', authRouter);
   app.use('/organizations', organizationRouter);
+  app.use('/venues', venueRouter);
 
-  app.listen(8000, () =>
-    console.info('Server is running on http://localhost:8000')
-  );
+  app.listen(8000, () => {
+    console.info(
+      new Date(Date.now()).toLocaleString(),
+      'Server is running on http://localhost:8000'
+    );
+  });
 }
 
 start();

@@ -16,11 +16,9 @@ export const opts: StrategyOptionsWithoutRequest = {
   secretOrKey: process.env.SECRET!,
 };
 
-export const jwtStrategy = new JwtStrategy(opts, async (jwt_payload, done) => {
+export const jwtStrategy = new JwtStrategy(opts, async (payload, done) => {
   try {
-    const user = await getUser(jwt_payload.id);
-
-    console.log('jwt', typeof jwt_payload.id);
+    const user = await getUser(payload.id);
 
     if (!user) return done(null, false);
 

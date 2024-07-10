@@ -1,7 +1,7 @@
 import { knex } from '../db';
-import { CreateOrganization } from './types';
+import { CreateOwnedOrganization } from './types';
 
-export function createOrganization(organization: CreateOrganization) {
+export function createOrganization(organization: CreateOwnedOrganization) {
   return knex.insert(organization).into('organizations').returning('*');
 }
 
@@ -16,7 +16,7 @@ export function getOrganizationsByUser(userId: number) {
 export function updateOrganization(
   userId: number,
   organizationId: number,
-  data: Partial<CreateOrganization>
+  data: Partial<CreateOwnedOrganization>
 ) {
   return knex('organizations')
     .where({ ownerId: userId, id: organizationId })
