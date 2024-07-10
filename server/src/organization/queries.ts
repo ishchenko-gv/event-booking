@@ -22,3 +22,10 @@ export function updateOrganization(
     .where({ ownerId: userId, id: organizationId })
     .update({ ...data, updatedAt: knex.fn.now() }, '*');
 }
+
+export function deleteOrganization(userId: number, organizationId: number) {
+  return knex('organizations')
+    .where({ ownerId: userId, id: organizationId })
+    .delete()
+    .returning('id');
+}

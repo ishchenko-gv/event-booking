@@ -55,4 +55,22 @@ organizationRouter.put(
   }
 );
 
+organizationRouter.delete(
+  '/:id',
+  authRequired,
+  checkOwner(organizationQueries.getOrganization),
+  async (req, res, next) => {
+    try {
+      const organizationId = await organizationQueries.deleteOrganization(
+        req.user!.id,
+        +req.params.id
+      );
+
+      res.send(organizationId);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 export { organizationRouter };
