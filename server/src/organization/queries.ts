@@ -2,7 +2,19 @@ import { knex } from '../db';
 import { CreateOwnedOrganization } from './types';
 
 export function createOrganization(organization: CreateOwnedOrganization) {
-  return knex.insert(organization).into('organizations').returning('*');
+  return knex.transaction(async (trx) => {
+    const inserted = await trx
+      .insert(organization)
+      .into('organizations')
+      .returning('*');
+
+    await trx('organizations_users_m2m').insert({
+      userId: organization.ownerId,
+      organizationId: inserted[0].id,
+    });
+
+    return inserted;
+  });
 }
 
 export function getOrganization(id: number) {
@@ -10,7 +22,7 @@ export function getOrganization(id: number) {
 }
 
 export function getOrganizationsByUser(userId: number) {
-  return knex.select('*').from('organizations').where('ownerId', userId);
+  return knex.select('*').from('organizations').where({ ownerId: userId });
 }
 
 export function updateOrganization(
@@ -28,4 +40,18 @@ export function deleteOrganization(userId: number, organizationId: number) {
     .where({ ownerId: userId, id: organizationId })
     .delete()
     .returning('id');
+}
+
+export function getUserExistsInOrganization(
+  userId: number,
+  organizationId: number
+) {
+  const inner = knex('organizations_users_m2m').whereRaw(
+    'user_id = ? and organization_id = ?',
+    [userId, organizationId]
+  );
+
+  const exists = knex.raw(inner).wrap('exists (', ')');
+
+  return knex('organizations_users_m2m').select(exists).limit(1);
 }

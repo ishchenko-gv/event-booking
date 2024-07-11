@@ -5,7 +5,7 @@ import { authRequired, checkOwner } from '../auth/middlewares';
 import { createOrganizationSchema } from './schemas';
 import * as organizationQueries from './queries';
 
-const organizationRouter = Router();
+export const organizationRouter = Router();
 
 organizationRouter.post('/', authRequired, async (req, res, next) => {
   try {
@@ -25,15 +25,6 @@ organizationRouter.post('/', authRequired, async (req, res, next) => {
   }
 });
 
-organizationRouter.get(
-  '/:id',
-  authRequired,
-  checkOwner(organizationQueries.getOrganization),
-  (_, res) => {
-    res.send(res.locals.object);
-  }
-);
-
 organizationRouter.get('/owned', authRequired, async (req, res, next) => {
   try {
     const organizations = await organizationQueries.getOrganizationsByUser(
@@ -46,6 +37,15 @@ organizationRouter.get('/owned', authRequired, async (req, res, next) => {
   }
 });
 
+organizationRouter.get(
+  '/:id',
+  authRequired,
+  checkOwner(organizationQueries.getOrganization),
+  (_, res) => {
+    res.send(res.locals.object);
+  }
+);
+
 organizationRouter.put(
   '/:id',
   authRequired,
@@ -57,7 +57,7 @@ organizationRouter.put(
         .parse(req.body);
 
       const updatedOrganization = await organizationQueries.updateOrganization(
-        req.user!.id,
+        +req.user!.id,
         +req.params.id,
         organizationData
       );
@@ -87,4 +87,15 @@ organizationRouter.delete(
   }
 );
 
-export { organizationRouter };
+organizationRouter.post('/:id/user', authRequired, async (req, res, next) => {
+  try {
+    const isUserExists = await organizationQueries.getUserExistsInOrganization(
+      req.user!.id,
+      +req.params.id
+    );
+
+    res.send(isUserExists);
+  } catch (err) {
+    next(err);
+  }
+});
