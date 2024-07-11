@@ -1,4 +1,5 @@
 import { knex } from '../db';
+
 import { CreateOwnedOrganization } from './types';
 
 export function createOrganization(organization: CreateOwnedOrganization) {
